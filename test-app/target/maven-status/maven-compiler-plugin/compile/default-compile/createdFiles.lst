@@ -1,0 +1,3 @@
+com\test\entity\User.class
+com\test\mapper\UserMapper.class
+com\test\TestApplication.class

@@ -1,0 +1,51 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: gateway-service
+  cloud:
+    compatibility-verifier:
+      enabled: false
+    nacos:
+      discovery:
+        server-addr: 192.168.118.130:8848
+        namespace: dev
+        group: ENERGY_PLATFORM
+      config:
+        server-addr: 192.168.118.130:8848
+        namespace: dev
+        group: ENERGY_PLATFORM
+        import-check:
+          enabled: false
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true
+          group: ENERGY_PLATFORM
+      routes:
+        - id: auth-service
+          uri: lb://ENERGY_PLATFORM@@auth-service
+          predicates:
+            - Path=/api/auth/**
+        - id: device-service
+          uri: lb://ENERGY_PLATFORM@@device-service
+          predicates:
+            - Path=/api/devices/**
+        - id: data-collection-service
+          uri: lb://ENERGY_PLATFORM@@data-collection-service
+          predicates:
+            - Path=/api/data/collect/**
+        - id: data-process-service
+          uri: lb://ENERGY_PLATFORM@@data-process-service
+          predicates:
+            - Path=/api/data/process/**
+        - id: data-storage-service
+          uri: lb://ENERGY_PLATFORM@@data-storage-service
+          predicates:
+            - Path=/api/data/storage/**
+        - id: alert-service
+          uri: lb://ENERGY_PLATFORM@@alert-service
+          predicates:
+            - Path=/api/alerts/**

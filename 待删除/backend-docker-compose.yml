@@ -1,0 +1,57 @@
+version: "3.8"
+
+services:
+  mysql:
+    image: crpi-880y0pjuczeqxg2h.cn-hangzhou.personal.cr.aliyuncs.com/quhu-images/mysql:8.0
+    container_name: energy-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root123
+      MYSQL_DATABASE: energy_monitor
+      TZ: Asia/Shanghai
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+      - ./mysql-init.sql:/docker-entrypoint-initdb.d/01-mysql-init.sql
+    networks:
+      - energy-network
+    restart: unless-stopped
+
+  redis:
+    image: crpi-880y0pjuczeqxg2h.cn-hangzhou.personal.cr.aliyuncs.com/quhu-images/redis:7-alpine
+    container_name: energy-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    networks:
+      - energy-network
+    restart: unless-stopped
+
+  nacos:
+    image: crpi-880y0pjuczeqxg2h.cn-hangzhou.personal.cr.aliyuncs.com/quhu-images/nacos-server:v2.2.3
+    container_name: energy-nacos
+    environment:
+      MODE: standalone
+      JVM_XMS: 512m
+      JVM_XMX: 512m
+    ports:
+      - "8848:8848"
+      - "9848:9848"
+    volumes:
+      - nacos-logs:/home/nacos/logs
+    networks:
+      - energy-network
+    restart: unless-stopped
+    depends_on:
+      - mysql
+      - redis
+
+networks:
+  energy-network:
+    driver: bridge
+
+volumes:
+  mysql-data:
+  redis-data:
+  nacos-logs:

@@ -1,0 +1,29 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: auth-service
+  cloud:
+    compatibility-verifier:
+      enabled: false
+    nacos:
+      discovery:
+        server-addr: 192.168.118.130:8848
+        namespace: dev
+        group: ENERGY_PLATFORM
+      config:
+        server-addr: 192.168.118.130:8848
+        namespace: dev
+        group: ENERGY_PLATFORM
+        import-check:
+          enabled: false
+  datasource:
+    url: jdbc:mysql://192.168.118.130:3306/energy_monitor?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
+    username: root
+    password: root123
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+mybatis-plus:
+  mapper-locations: classpath*:mapper/**/*.xml
+  type-aliases-package: com.energy.core.entity
